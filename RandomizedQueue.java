@@ -25,7 +25,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
  public void enqueue(Item item)         // add the item
  {
   if (item == null) throw new NullPointerException("Fail to add a null item");
-  if (length == rq.length) resize(length*2);
+  if (length == rq.length) resize(rq.length*2);
   rq[length++] = item;
  }
  
@@ -43,7 +43,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
   Item it = rq[index];
   for (int i = index; i < length-1; i++) rq[i] = rq[i+1];
   length--;
-  if (length == rq.length/4) resize(length); 
+  if (length > 0 && length == rq.length/4) resize(rq.length/2); 
   return it;
  }
  
