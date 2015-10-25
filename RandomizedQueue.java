@@ -42,7 +42,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
   int index = StdRandom.uniform(length);
   Item it = rq[index];
   for (int i = index; i < length-1; i++) rq[i] = rq[i+1];
-  length--;
+  rq[length--] = null;
   if (length > 0 && length == rq.length/4) resize(rq.length/2); 
   return it;
  }
@@ -59,22 +59,13 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
  }
  
  private class RQIterator implements Iterator<Item> {
-//  Item[] copy = (Item[]) new Object[length];
-  private int index;
-  RQIterator() {
- //  for (int i = 0; i < length; i++) copy[i] = rq[i];   
-   if (length > 0) index = StdRandom.uniform(length);
-  }
-  
   private int count = length;
   public void remove() { throw new UnsupportedOperationException("Remove unsupported"); }
   public boolean hasNext() { return (length > 0) && (count > 0); }
   public Item next() {
    if (!hasNext()) throw new NoSuchElementException("Iterate in an empty deque");  
    count--;   
-   Item it = rq[index];
-   index = StdRandom.uniform(length);
-   return it;
+   return sample();
   }
  }
 // public static void main(String[] args) // unit testing

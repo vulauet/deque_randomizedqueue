@@ -81,11 +81,14 @@ public class Deque<Item> implements Iterable<Item> {
  } 
  
  private class DequeIterator implements Iterator<Item> {
-  private Node current = first;   
+  private Node current = first;
+  private int count = length;  
   public void remove() { throw new UnsupportedOperationException("Remove unsupported"); }
-  public boolean hasNext() { return current != null; }
+  // public boolean hasNext() { return current != null; }
+  public boolean hasNext() { return count > 0; }
   public Item next() {
    if (!hasNext()) throw new NoSuchElementException("Iterate in an empty deque");
+   count--;
    Item it = current.item;
    current = current.next;
    return it;
