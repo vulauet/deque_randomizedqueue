@@ -58,13 +58,20 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
   return new RQIterator();
  }
  
- private class RQIterator implements Iterator<Item>
- {
-  private int index = StdRandom.uniform(length);
+ private class RQIterator implements Iterator<Item> {
+//  Item[] copy = (Item[]) new Object[length];
+  private int index;
+  RQIterator() {
+ //  for (int i = 0; i < length; i++) copy[i] = rq[i];   
+   if (length > 0) index = StdRandom.uniform(length);
+  }
+  
+  private int count = length;
   public void remove() { throw new UnsupportedOperationException("Remove unsupported"); }
-  public boolean hasNext() { return length > 0; }
+  public boolean hasNext() { return (length > 0) && (count > 0); }
   public Item next() {
-   if (isEmpty()) throw new NoSuchElementException("Iterate in an empty deque");   
+   if (!hasNext()) throw new NoSuchElementException("Iterate in an empty deque");  
+   count--;   
    Item it = rq[index];
    index = StdRandom.uniform(length);
    return it;

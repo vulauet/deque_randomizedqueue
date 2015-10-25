@@ -9,7 +9,7 @@ public class Deque<Item> implements Iterable<Item> {
  private class Node {
   Item item;
   Node next;
-  Node previous;
+  Node prev;
  }
  
  public Deque() {
@@ -34,7 +34,7 @@ public class Deque<Item> implements Iterable<Item> {
   first.item = item;
   first.next = oldFirst;
   if (size() == 1) last = first;
-  else oldFirst.previous = first;
+  else if (size() > 1) oldFirst.prev = first;
  } 
  
  public void addLast(Item item)           // add the item to the end    
@@ -44,9 +44,11 @@ public class Deque<Item> implements Iterable<Item> {
   Node oldLast = last;
   last = new Node();
   last.item = item;
-  last.previous = oldLast;
   if (size() == 1) first = last;
-  else oldLast.next = last;
+  else {
+   oldLast.next = last;
+   last.prev = oldLast;   
+  }
  }
  
  public Item removeFirst()                // remove and return the item from the front    
@@ -55,6 +57,8 @@ public class Deque<Item> implements Iterable<Item> {
    length--;
    Item it = first.item;
    first = first.next;
+   if (isEmpty())
+    last = first;
    return it;   
   } else throw new NoSuchElementException("Remove from an empty deque");
  }
@@ -64,12 +68,14 @@ public class Deque<Item> implements Iterable<Item> {
   if (!isEmpty()) {
    length--;
    Item it = last.item;
-   last = last.previous;
+   Node oldLast = last.prev;
+   last = oldLast;
+   if (isEmpty()) first = last;
    return it;
   } else throw new NoSuchElementException("Remove from an empty deque");
  }
  
- public Iterator<Item> iterator()         // return an iterator over items in order from front to end
+ public Iterator<Item> iterator() // return an iterator over items in order from front to end
  {
   return new DequeIterator();
  } 
@@ -77,9 +83,9 @@ public class Deque<Item> implements Iterable<Item> {
  private class DequeIterator implements Iterator<Item> {
   private Node current = first;   
   public void remove() { throw new UnsupportedOperationException("Remove unsupported"); }
-  public boolean hasNext() { return current == null; }
+  public boolean hasNext() { return current != null; }
   public Item next() {
-   if (isEmpty()) throw new NoSuchElementException("Iterate in an empty deque");
+   if (!hasNext()) throw new NoSuchElementException("Iterate in an empty deque");
    Item it = current.item;
    current = current.next;
    return it;
