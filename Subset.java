@@ -5,7 +5,7 @@ public class Subset {
     public static void main(String[] args) {
         int k;
         String s;
-        RandomizedQueue<String> rq = new RandomizedQueue();
+        RandomizedQueue<String> rq = new RandomizedQueue<String>();
         k = Integer.parseInt(args[0]);
         while (!StdIn.isEmpty()) {
             s = StdIn.readString();
